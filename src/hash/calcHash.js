@@ -9,8 +9,10 @@ const calculateHash = async () => {
   const readFile = fs.createReadStream(file);
   const hash = crypto.createHash('sha256');
   readFile.on('data', (chunk) => {
-    const result = hash.update(chunk).digest('hex');
-    console.log(result);
+    hash.update(chunk);
+  });
+  readFile.on('end', () => {
+    console.log(hash.digest('hex'));
   });
 };
 
