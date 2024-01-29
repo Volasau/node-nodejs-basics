@@ -1,14 +1,19 @@
-import fs from 'fs';
+import fs from 'fs/promises';
+import path from 'path';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const textError = 'FS operation failed';
 
 const create = async () => {
-  const fresh = 'src/fs/files/fresh.txt';
+  const fresh = path.join(__dirname, 'files', 'fresh.txt');
   const text = 'I am fresh and young';
-  const textError = 'FS operation failed';
 
-  if (fs.existsSync(fresh)) {
+  try {
+    await fs.writeFile(fresh, text, { encoding: 'utf8', flag: 'wx' });
+  } catch {
     throw new Error(textError);
-  } else {
-    fs.writeFileSync(fresh, text);
   }
 };
 
